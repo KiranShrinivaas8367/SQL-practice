@@ -83,3 +83,29 @@ from patients
 where allergies = 'Penicillin' or allergies = 'Morphine' 
 order by 
 allergies,first_name,last_name;
+
+(or)
+
+SELECT  first_name,  last_name,  allergies
+FROM patients
+WHERE  allergies IN ('Penicillin', 'Morphine')
+ORDER BY  allergies,  first_name,  last_name;
+
+#8
+Show patient_id, diagnosis from admissions. Find patients admitted multiple times for the same diagnosis.
+
+select patient_id,diagnosis 
+from admissions 
+group by diagnosis,patient_id 
+having count(*) > 1;
+
+#9
+Show the city and the total number of patients in the city.
+Order from most to least patients and then by city name ascending.
+
+select city,count(*) as num_patients 
+from patients 
+group by city
+order by 
+num_patients desc,city asc;
+
