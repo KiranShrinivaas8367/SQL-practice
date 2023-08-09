@@ -109,3 +109,44 @@ group by city
 order by 
 num_patients desc,city asc;
 
+#10
+Show first name, last name and role of every person that is either patient or doctor.
+The roles are either "Patient" or "Doctor"
+
+select first_name,last_name,'Patient' as role from patients
+union all
+select first_name,last_name,'Doctor' as role from doctors
+
+#11
+Show all allergies ordered by popularity. Remove NULL values from query.
+
+select allergies,count(*) as total_diagnosis 
+from patients 
+where allergies is not null 
+group by allergies 
+order by total_diagnosis desc;
+
+#12
+Show all patient's first_name, last_name, and birth_date who were born in the 1970s decade. Sort the list starting from the earliest birth_date.
+
+select first_name,last_name,birth_date 
+from patients 
+where year(birth_date) 
+between 1970 and 1979 
+order by birth_date;
+
+(or)
+
+SELECT  first_name,  last_name,  birth_date
+FROM patients
+WHERE year(birth_date) LIKE '197%'
+ORDER BY birth_date ASC;
+
+#13
+We want to display each patient's full name in a single column. Their last_name in all upper letters must appear first, then first_name in all lower case letters. Separate the last_name and first_name with a comma. Order the list by the first_name in decending order
+EX: SMITH,jane
+
+select concat(upper(last_name),',',lower(first_name)) as new_name_format 
+from patients 
+order by first_name desc;
+
