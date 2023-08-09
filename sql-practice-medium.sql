@@ -150,3 +150,41 @@ select concat(upper(last_name),',',lower(first_name)) as new_name_format
 from patients 
 order by first_name desc;
 
+#14
+Show the province_id(s), sum of height; where the total sum of its patient's height is greater than or equal to 7,000.
+
+select province_id,sum(height) as sum_height 
+from patients 
+group by province_id
+having sum_height >=7000;
+
+#15
+Show the difference between the largest weight and smallest weight for patients with the last name 'Maroni'
+
+select (max(weight) - min(weight)) as weight_delta 
+from patients 
+where last_name like 'Maroni';
+
+#16
+Show all of the days of the month (1-31) and how many admission_dates occurred on that day. Sort by the day with most admissions to least admissions.
+
+select day(admission_date) as day_number,count(*) as number_of_admissions 
+from admissions 
+group by day_number 
+order by number_of_admissions desc;
+
+#17
+Show all columns for patient_id 542's most recent admission_date.
+
+select * 
+from admissions 
+where patient_id=542 
+order by admission_date desc limit 1;
+
+(or)
+
+SELECT *
+FROM admissions
+GROUP BY patient_id
+HAVING  patient_id = 542
+AND max(admission_date)
