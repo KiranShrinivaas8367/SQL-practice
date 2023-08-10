@@ -188,3 +188,34 @@ FROM admissions
 GROUP BY patient_id
 HAVING  patient_id = 542
 AND max(admission_date)
+
+#18
+Show patient_id, attending_doctor_id, and diagnosis for admissions that match one of the two criteria:
+1. patient_id is an odd number and attending_doctor_id is either 1, 5, or 19.
+2. attending_doctor_id contains a 2 and the length of patient_id is 3 characters.
+
+select patient_id,attending_doctor_id,diagnosis 
+from admissions 
+where ((patient_id%2 == 1) and attending_doctor_id in (1,5,19)) 
+or
+attending_doctor_id like '%2%' and len(patient_id)==3;
+
+#19
+Show first_name, last_name, and the total number of admissions attended for each doctor.
+Every admission has been attended by a doctor.
+
+select first_name,last_name,count(*) as admission_total 
+from admissions join doctors 
+on attending_doctor_id = doctor_id 
+group by attending_doctor_id;
+
+#20
+For each doctor, display their id, full name, and the first and last admission date they attended.
+
+select doctor_id,
+concat(first_name,' ',last_name) as full_name,
+min(admission_date) as first_admission_date,
+max(admission_date) as last_admission_date 
+from admissions join doctors 
+on attending_doctor_id = doctor_id
+group by doctor_id;
