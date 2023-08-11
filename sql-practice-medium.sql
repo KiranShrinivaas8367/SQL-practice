@@ -219,3 +219,66 @@ max(admission_date) as last_admission_date
 from admissions join doctors 
 on attending_doctor_id = doctor_id
 group by doctor_id;
+
+#21
+Display the total amount of patients for each province. Order by descending.
+
+select province_name,count(*) as patient_count 
+from patients join province_names 
+on patients.province_id = province_names.province_id
+group by province_name 
+order by patient_count desc;
+
+#22
+For every admission, display the patient's full name, their admission diagnosis, and their doctor's full name who diagnosed their problem.
+
+select concat(patients.first_name,' ',patients.last_name) as patient_name,
+diagnosis,
+concat(doctors.first_name,' ',doctors.last_name) as doctor_name
+from patients join admissions 
+on patients.patient_id = admissions.patient_id 
+join doctors on attending_doctor_id = doctor_id;
+
+#23
+Display the number of duplicate patients based on their first_name and last_name.
+
+select first_name,last_name, count(*) as num_of_duplicates 
+from patients 
+group by first_name,last_name 
+having num_of_duplicates > 1;
+
+#24
+Display patient's full name,
+height in the units feet rounded to 1 decimal,
+weight in the unit pounds rounded to 0 decimals,
+birth_date,
+gender non abbreviated.
+
+Convert CM to feet by dividing by 30.48.
+Convert KG to pounds by multiplying by 2.205.
+
+select concat(first_name,' ',last_name) as patient_name,
+round((height/30.48),1) as height,
+round((weight*2.205),0) as weight,birth_date,
+(case when gender is 'M' then 'MALE'
+ELSE
+'FEMALE'
+end) as gender_type 
+from patients
+group by patient_id;
+
+#25
+Show patient_id, first_name, last_name from patients whose does not have any records in the admissions table. (Their patient_id does not exist in any admissions.patient_id rows.)
+
+select patients.patient_id,
+first_name,last_name 
+from patients left join admissions 
+on patients.patient_id=admissions.patient_id
+where admissions.patient_id is null;
+
+(or)
+
+select patients.patient_id,first_name,last_name from patients
+where patients.patient_id 
+not in (select admissions.patient_id from admissions)
+
